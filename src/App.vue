@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import {Toast} from "vant";
 import {ref} from 'vue';
-import Home from "./components/Home.vue";
-import Team from "./components/Team.vue";
-import Person from "./components/Person.vue";
+import router from "./config/Routers.ts";
 
+let lastActive = '';
 const active = ref("home");
-const onClickLeft = () => history.back();
-const onClickRight = () => Toast('按钮');
+const onClickLeft = () => {
+  history.back();
+  active.value = lastActive;
+};
+const onClickRight = () => {
+  lastActive = active.value;
+  active.value = "";
+  router.push('/search');
+};
 </script>
 
 <template>
@@ -23,21 +28,14 @@ const onClickRight = () => Toast('按钮');
     </template>
   </van-nav-bar>
   <div id="content">
-    <template v-if="active === 'home'">
-      <Home/>
-    </template>
-    <template v-if="active === 'team'">
-      <Team/>
-    </template>
-    <template v-if="active === 'person'">
-      <Person/>
-    </template>
   </div>
 
+  <router-view/>
+
   <van-tabbar v-model="active">
-    <van-tabbar-item icon="home-o" name="home">主页</van-tabbar-item>
-    <van-tabbar-item icon="friends-o" name="team">队伍</van-tabbar-item>
-    <van-tabbar-item icon="setting-o" name="person">个人</van-tabbar-item>
+    <van-tabbar-item icon="home-o" name="home" to="/home">主页</van-tabbar-item>
+    <van-tabbar-item icon="friends-o" name="team" to="/team">队伍</van-tabbar-item>
+    <van-tabbar-item icon="setting-o" name="person" to="/person">个人</van-tabbar-item>
   </van-tabbar>
 
 
